@@ -7,10 +7,10 @@ class AffineLayer(LayerWithWeights):
         super(AffineLayer, self).__init__(input_size, output_size, seed=seed)
 
     def forward(self, x):
-        '''
-            :param x: activations/inputs from previous layer
-            :return: output of affine layer
-        '''
+        """
+        :param x: activations/inputs from previous layer
+        :return: output of affine layer
+        """
         # Save x for using in backward pass
         self.x = x.copy()
         out = None
@@ -18,20 +18,20 @@ class AffineLayer(LayerWithWeights):
         ##### YOUR CODE STARTS #####
 
         # Vectorize the input to [batchsize, others] array
-        x = x.reshape(x.shape[0], -1) # [batchsize, -1]
+        x = x.reshape(x.shape[0], -1)  # [batchsize, -1]
 
         # Do the affine transform
         out = np.dot(x, self.W) + self.b
-        
+
         # print(out)
         ##### YOUR CODE ENDS #######
         return out
 
     def backward(self, dprev):
-        '''
-            :param dprev: gradient of next layer:
-            :return: downstream gradient
-        '''
+        """
+        :param dprev: gradient of next layer:
+        :return: downstream gradient
+        """
 
         batch_size = self.x.shape[0]
         x_vectorized = None
@@ -43,9 +43,9 @@ class AffineLayer(LayerWithWeights):
 
         dx = np.dot(dprev, self.W.T).reshape(self.x.shape)  # dl/dx = dl/dout * dout/dx
 
-        dw = np.dot(x_vectorized.T, dprev)  # dl/dw = dout/dw * dl/dout 
+        dw = np.dot(x_vectorized.T, dprev)  # dl/dw = dout/dw * dl/dout
 
-        db = np.dot(dprev.T, np.ones(batch_size))  # dl/db = dl/dout * dout/db 
+        db = np.dot(dprev.T, np.ones(batch_size))  # dl/db = dl/dout * dout/db
 
         # YOUR CODE ENDS
 
@@ -55,4 +55,4 @@ class AffineLayer(LayerWithWeights):
         return dx, dw, db
 
     def __repr__(self):
-        return 'Affine layer'
+        return "Affine layer"
